@@ -27,9 +27,8 @@
   }
 
   .large-wallet-dropdown {
-    min-width: 260px;
+    min-width: 290px;
     padding: 10px 15px;
-    font-size: 16px;
   }
 
   .large-wallet-dropdown .dropdown-item {
@@ -72,8 +71,8 @@
           <img src="{{ asset('icons/wallet.png') }}" alt="Wallet" height="35">
         </div>
         <ul class="dropdown-menu dropdown-menu-end large-wallet-dropdown" aria-labelledby="dropdownWallet">
-          <li class="dropdown-item fw-bold fs-6">💰 Saldo Anda: Rp{{ number_format(Auth::user()->wallet_balance ?? 0, 0, ',', '.') }}</li>
-          <li class="dropdown-item text-danger fw-semibold fs-6">❗Saldo Ditahan: Rp{{ number_format(Auth::user()->wallet_reserved ?? 0, 0, ',', '.') }}</li>
+          <li class="dropdown-item fw-bold fs-6">💰 Saldo Anda: Rp{{ number_format($user->wallet->balance ?? 0, 0, ',', '.') }}</li>
+          <li class="dropdown-item text-danger fw-semibold fs-6">❗Saldo Ditahan: Rp{{ number_format($user->wallet->reserved_balance ?? 0, 0, ',', '.') }}</li>
         </ul>
       </li>
       <li class="nav-item">
@@ -108,13 +107,9 @@
     <div class="row row-cols-6 row-cols-sm-6 row-cols-md-6 g-3">
       @foreach($categories as $cat)
         <div class="col">
-          <a href="{{ route('auctions.index',['category'=>$cat['name']]) }}"
-             class="text-decoration-none text-dark">
+          <a href="{{ route('auctions.index',['category'=>$cat['name']]) }}" class="text-decoration-none text-dark">
             <div class="card text-center border-0 shadow-sm h-100 py-3">
-              <img src="{{$cat['icon_path']}}"
-                   alt="{{ $cat['name'] }}"
-                   class="mx-auto mb-2"
-                   style="width:55px;height:55px;object-fit:contain;">
+              <img src="{{$cat['icon_path']}}" alt="{{ $cat['name'] }}" class="mx-auto mb-2" style="width:55px;height:55px;object-fit:contain;">
               <div class="small fw-medium text-truncate px-2">
                 {{ $cat['name'] }}
               </div>
@@ -132,14 +127,8 @@
         <div class="col-md-3 mb-4">
           <div class="card product-card position-relative h-100">
             <span class="label-live">LIVE</span>
-            @if ($auc->coverImage)
-                <img src="{{ asset($auc->coverImage->image_path) }}" class="card-img-top">
-            @else
-                <img src="{{ asset('images/default.jpg') }}" class="card-img-top">
-            @endif
+              <img src="{{ asset($auc->coverImage->image_path) }}" class="card-img-top">
 
-
-  
             <div class="card-body">
               <small class="text-muted d-block mb-1">
                 Berakhir {{ \Carbon\Carbon::parse($auc->end_time)->diffForHumans(now(), true) }}
@@ -155,16 +144,11 @@
                 </div>
                 <div class="d-flex justify-content-between small">
                   <span class="fw-semibold">Bid Sekarang</span>
-                  <span class="fw-semibold text-success">
-                    Rp{{ number_format($current,0,',','.') }}
-                  </span>
+                  <span class="fw-semibold text-success">Rp{{ number_format($current,0,',','.') }}</span>
                 </div>
               </div>
   
-              <a href="{{ route('auctions.show',$auc) }}"
-                 class="btn btn-sm btn-success w-100">
-                OPEN BIDDING
-              </a>
+              <a href="{{ route('auctions.show',$auc) }}" class="btn btn-sm btn-success w-100">OPEN BIDDING</a>
             </div>
           </div>
         </div>
