@@ -1,25 +1,39 @@
 # ⚡ LelangKilat – Aplikasi Lelang Ultra-Cepat Berbasis Laravel
-LelangKilat adalah platform lelang real-time berbasis Laravel yang dirancang untuk menciptakan pengalaman kompetitif, adil, dan instan bagi pengguna kampus maupun publik. Dengan integrasi WebSocket dan sistem antrian (queue), aplikasi ini memungkinkan pengguna untuk melakukan penawaran (bid) secara cepat dan aman.
 
-🚀 Fitur Unggulan
-🎯 Lelang Real-Time — Sistem penawaran cepat berbasis WebSocket, anti-sniping & auto-bid.
-👨‍💼 Manajemen Admin — Kelola pengguna, lelang, tawaran, dan pembayaran dengan mudah.
-💸 Sistem Dompet (Wallet) — Setiap pengguna memiliki dompet digital untuk mengatur saldo penawaran.
-🔐 Mekanisme Escrow — Dana tertahan otomatis hingga lelang selesai demi keamanan kedua belah pihak.
-🖥️ Panel CRUD Lengkap — Kelola semua entitas melalui antarmuka Blade yang elegan dan responsif.
+LelangKilat adalah platform lelang berbasis web yang didesain untuk memberikan pengalaman **real-time**, **gamified**, dan **instan** dalam proses pelelangan. Sistem ini dilengkapi dengan fitur dompet digital, keamanan escrow, dan anti-sniping algorithm demi memastikan proses bidding yang adil dan cepat.
 
-🛠️ Teknologi yang Digunakan
-Laravel 10+ (MVC Framework)
-MySQL (Relational Database)
-Blade Templating Engine
-WebSocket (Real-time bidding)
-Laravel Queue (Job Dispatching)
-Bootstrap 5 (Frontend UI)
+---
 
-📁 Struktur Database (via Migration & Seeder)
-Pengguna (users) – login via NPM (tanpa email)
-Lelang (auctions) – informasi barang & waktu
-Tawaran (bids) – sistem bidding real-time
-Pembayaran (payments) – pencatatan transaksi akhir
-Admin – kontrol penuh terhadap sistem
-Seeder sudah disediakan untuk masing-masing entitas guna mendukung data awal pengujian.
+## 🚀 Fitur Unggulan
+
+- 🎯 Lelang cepat & real-time dengan WebSocket
+- 🛡️ Sistem escrow untuk keamanan pembeli & penjual
+- 👛 Wallet pengguna untuk mengatur saldo penawaran
+- 🔁 Auto-bid dan Anti-sniping system
+- 🖥️ Panel Admin CRUD (Users, Auctions, Bids, Payments)
+- 📄 Blade Templating yang responsif dan modular
+
+---
+
+## 🧱 Teknologi yang Digunakan
+
+- **Laravel 10+** – PHP Framework MVC
+- **MySQL** – Relational Database
+- **WebSocket / Laravel Echo** – Real-time communication
+- **Laravel Queue** – Job dispatching untuk penawaran
+- **Bootstrap 5** – Desain antarmuka pengguna
+- **Blade** – Template engine Laravel
+
+---
+
+## 📂 Struktur Database
+
+Proyek ini menggunakan 5 entitas utama:
+
+| Tabel      | Deskripsi                                     |
+|------------|-----------------------------------------------|
+| users      | Data pengguna (login via NPM, tanpa email)    |
+| auctions   | Data barang yang dilelang                     |
+| bids       | Data penawaran dari pengguna                  |
+| payments   | Transaksi pembayaran lelang                   |
+| admins     | Data admin sistem                             |
