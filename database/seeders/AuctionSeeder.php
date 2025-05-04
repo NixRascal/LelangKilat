@@ -1,0 +1,136 @@
+<?php
+
+namespace Database\Seeders;
+
+use Illuminate\Database\Seeder;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Carbon;
+
+class AuctionSeeder extends Seeder
+{
+    public function run(): void
+    {
+        DB::table('auctions')->insert([
+            [
+                'user_id' => 3,
+                'title' => 'Laptop MacBook Air M1',
+                'description' => 'Elektronik premium, kondisi mulus.',
+                'category_id' => 3,
+                'starting_bid' => 10000000,
+                'current_bid' => 11500000,
+                'start_time' => Carbon::now(),
+                'end_time' => Carbon::now()->addDays(2),
+                'status' => 'ACTIVE',
+                'winner_id' => null,
+            ],
+            [
+                'user_id' => 4,
+                'title' => 'Motor Sport Yamaha R15',
+                'description' => 'Motor kencang untuk pecinta kecepatan.',
+                'category_id' => 5,
+                'starting_bid' => 18000000,
+                'current_bid' => 19500000,
+                'start_time' => Carbon::now(),
+                'end_time' => Carbon::now()->addDays(1),
+                'status' => 'ACTIVE',
+                'winner_id' => null,
+            ],
+            [
+                'user_id' => 5,
+                'title' => 'Tanah Kavling di Bogor',
+                'description' => 'Luas 120m2, SHM, dekat tol.',
+                'category_id' => 11,
+                'starting_bid' => 60000000,
+                'current_bid' => 65000000,
+                'start_time' => Carbon::now(),
+                'end_time' => Carbon::now()->addHours(36),
+                'status' => 'ACTIVE',
+                'winner_id' => null,
+            ],
+            [
+                'user_id' => 6,
+                'title' => 'Ruko Siap Usaha di Palembang',
+                'description' => 'Lokasi strategis di pusat kota.',
+                'category_id' => 9,
+                'starting_bid' => 85000000,
+                'current_bid' => 87000000,
+                'start_time' => Carbon::now(),
+                'end_time' => Carbon::now()->addHours(20),
+                'status' => 'ACTIVE',
+                'winner_id' => null,
+            ],
+            [
+                'user_id' => 3,
+                'title' => 'Smartphone Samsung S21',
+                'description' => 'Masih garansi, kondisi 98%.',
+                'category_id' => 3,
+                'starting_bid' => 6500000,
+                'current_bid' => 7000000,
+                'start_time' => Carbon::now(),
+                'end_time' => Carbon::now()->addHours(48),
+                'status' => 'ACTIVE',
+                'winner_id' => null,
+            ],
+            [
+                'user_id' => 4,
+                'title' => 'Mobil Innova 2019',
+                'description' => 'Kondisi bagus, pajak hidup.',
+                'category_id' => 6,
+                'starting_bid' => 125000000,
+                'current_bid' => 135000000,
+                'start_time' => Carbon::now(),
+                'end_time' => Carbon::now()->addDays(2),
+                'status' => 'ACTIVE',
+                'winner_id' => null,
+            ],
+            [
+                'user_id' => 5,
+                'title' => 'Hotel Mini di Jogja',
+                'description' => '7 kamar, ramai wisatawan.',
+                'category_id' => 7,
+                'starting_bid' => 200000000,
+                'current_bid' => 215000000,
+                'start_time' => Carbon::now(),
+                'end_time' => Carbon::now()->addDays(3),
+                'status' => 'ACTIVE',
+                'winner_id' => null,
+            ],
+            [
+                'user_id' => 6,
+                'title' => 'Pabrik Kosmetik di Bekasi',
+                'description' => 'Perizinan lengkap, mesin aktif.',
+                'category_id' => 8,
+                'starting_bid' => 500000000,
+                'current_bid' => 530000000,
+                'start_time' => Carbon::now(),
+                'end_time' => Carbon::now()->addDays(5),
+                'status' => 'ACTIVE',
+                'winner_id' => null,
+            ],
+            [
+                'user_id' => 3,
+                'title' => 'Apartemen Sudirman Park',
+                'description' => 'Dekat mall, full furnished.',
+                'category_id' => 1,
+                'starting_bid' => 90000000,
+                'current_bid' => 97000000,
+                'start_time' => Carbon::now(),
+                'end_time' => Carbon::now()->addHours(60),
+                'status' => 'ACTIVE',
+                'winner_id' => null,
+            ],
+            [
+                'user_id' => 4,
+                'title' => 'Gudang Besar di Karawang',
+                'description' => 'Cocok untuk logistik & ekspedisi.',
+                'category_id' => 2,
+                'starting_bid' => 350000000,
+                'current_bid' => 370000000,
+                'start_time' => Carbon::now(),
+                'end_time' => Carbon::now()->addDays(4),
+                'status' => 'ACTIVE',
+                'winner_id' => null,
+            ],
+        ]);
+    }
+}

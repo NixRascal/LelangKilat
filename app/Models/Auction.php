@@ -33,4 +33,16 @@ class Auction extends Model
     public function bids() {
         return $this->hasMany(Bid::class);
     }
+
+    public function images() {
+        return $this->hasMany(AuctionImage::class);
+    }
+
+    public function category() {
+        return $this->belongsTo(Category::class);
+    }
+    public function coverImage() {
+        return $this->hasOne(AuctionImage::class)->where('is_cover', true);
+    }
+
 }

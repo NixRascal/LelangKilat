@@ -34,7 +34,7 @@ class AuthController extends Controller
 
         Auth::login($user);
 
-        return redirect()->route('auctions.index');
+        return redirect()->route('home');
     }
     
     public function showLoginForm() {
@@ -47,9 +47,9 @@ class AuthController extends Controller
             'password'=> 'required',
         ]);
 
-        if (Auth::attempt($creds, $request->boolean('remember'))) {
+        if (Auth::attempt($creds, true)) {
             $request->session()->regenerate();
-            return redirect()->intended(route('auctions.index'));
+            return redirect()->route('home');
         }
 
         return back()->withErrors(['email'=> 'Email atau password salah'])->onlyInput('email');
