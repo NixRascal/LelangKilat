@@ -46,12 +46,7 @@ class AuthController extends Controller
             'email'=> 'required|email',
             'password'=> 'required',
         ]);
-
-        if (Auth::attempt($creds, true)) {
-            $request->session()->regenerate();
-            return redirect()->route('home');
-        }
-
+        
         return back()->withErrors(['email'=> 'Email atau password salah'])->onlyInput('email');
     }
 

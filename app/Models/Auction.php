@@ -13,8 +13,8 @@ class Auction extends Model
         'user_id',
         'title',
         'description',
-        'starting_price',
-        'buy_now_price',
+        'starting_bid',
+        'current_bid',
         'start_time',
         'end_time',
         'status',
@@ -44,5 +44,4 @@ class Auction extends Model
     public function coverImage() {
         return $this->hasOne(AuctionImage::class)->where('is_cover', true);
     }
-
 }

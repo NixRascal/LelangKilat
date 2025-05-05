@@ -17,6 +17,7 @@ class UserSeeder extends Seeder
                 'password' => Hash::make('12345678'),
                 'role' => 'USER',
                 'profile_photo' => 'profiles/bayu.jpg',
+                'created_at' => now(),
             ],
             [
                 'name' => 'Admin Lelang',
@@ -24,6 +25,7 @@ class UserSeeder extends Seeder
                 'password' => Hash::make('12345678'),
                 'role' => 'ADMIN',
                 'profile_photo' => 'profiles/admin.jpg',
+                'created_at' => now(),
             ],
             [
                 'name' => 'Rina',
@@ -31,6 +33,7 @@ class UserSeeder extends Seeder
                 'password' => Hash::make('12345678'),
                 'role' => 'USER',
                 'profile_photo' => 'profiles/rina.jpg',
+                'created_at' => now(),
             ],
             [
                 'name' => 'Andi',
@@ -38,6 +41,7 @@ class UserSeeder extends Seeder
                 'password' => Hash::make('12345678'),
                 'role' => 'USER',
                 'profile_photo' => 'profiles/andi.jpg',
+                'created_at' => now(),
             ],
             [
                 'name' => 'Sinta',
@@ -45,6 +49,7 @@ class UserSeeder extends Seeder
                 'password' => Hash::make('12345678'),
                 'role' => 'USER',
                 'profile_photo' => 'profiles/sinta.jpg',
+                'created_at' => now(),
             ],
             [
                 'name' => 'Rizky',
@@ -52,6 +57,7 @@ class UserSeeder extends Seeder
                 'password' => Hash::make('12345678'),
                 'role' => 'USER',
                 'profile_photo' => 'profiles/rizky.jpg',
+                'created_at' => now(),
             ],
             [
                 'name' => 'Fajar',
@@ -59,6 +65,7 @@ class UserSeeder extends Seeder
                 'password' => Hash::make('12345678'),
                 'role' => 'USER',
                 'profile_photo' => 'profiles/fajar.jpg',
+                'created_at' => now(),
             ],
             [
                 'name' => 'Dewi',
@@ -66,6 +73,7 @@ class UserSeeder extends Seeder
                 'password' => Hash::make('12345678'),
                 'role' => 'USER',
                 'profile_photo' => 'profiles/dewi.jpg',
+                'created_at' => now(),
             ],
             [
                 'name' => 'Ilham',
@@ -73,6 +81,7 @@ class UserSeeder extends Seeder
                 'password' => Hash::make('12345678'),
                 'role' => 'USER',
                 'profile_photo' => 'profiles/ilham.jpg',
+                'created_at' => now(),
             ],
             [
                 'name' => 'Putri',
@@ -80,6 +89,7 @@ class UserSeeder extends Seeder
                 'password' => Hash::make('12345678'),
                 'role' => 'USER',
                 'profile_photo' => 'profiles/putri.jpg',
+                'created_at' => now(),
             ],
         ]);
     }

@@ -28,3 +28,9 @@ Route::get('/auctions', [HomeController::class,'index'])->name('auctions.index')
 Route::get('/auctions', [HomeController::class,'index'])->name('auctions.show');
 
 Route::get('/auctions/{category}', [AuctionController::class, 'index'])->name('auctions.index');
+
+Route::get('/auctions/{category?}', [AuctionController::class, 'index'])->name('auctions.index');
+
+Route::get('/auctions/create', [AuctionController::class, 'create'])->name('auctions.create');
+Route::get('/auctions/participated', [AuctionController::class, 'create'])->name('auctions.participated');
+Route::get('/auctions/mine', [AuctionController::class, 'create'])->name('auctions.mine');
