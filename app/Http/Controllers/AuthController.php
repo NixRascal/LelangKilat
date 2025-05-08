@@ -42,12 +42,22 @@ class AuthController extends Controller
     }
 
     public function login(Request $request) {
-        $creds = $request->validate([
+        $credentials = $request->validate([
             'email'=> 'required|email',
             'password'=> 'required',
         ]);
+
+        if (Auth::attempt($credentials)) {
+            $user = Auth::user();
+
+            if ($user->role == 'ADMIN') {
+                return redirect()->route('admin.dashboard');
+            }
+
+            return redirect()->intended('home');
+        }
         
-        return back()->withErrors(['email'=> 'Email atau password salah'])->onlyInput('email');
+        return back()->withErrors(['salah'=> 'Email atau password salah'])->onlyInput('email');
     }
 
     public function logout(Request $request) {

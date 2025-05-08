@@ -56,3 +56,8 @@
     object-fit: cover;
     object-position: center;
 }
+
+.sidebar {
+    width: 210px;
+    min-height: 100vh;
+}

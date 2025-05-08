@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.footer')
 
 @section('title', 'Login')
 
@@ -23,14 +23,20 @@
       <form method="POST" action="{{ route('login') }}">
         @csrf
 
+        @if($errors->has('salah'))
+          <div class="alert alert-danger">
+              {{ $errors->first('salah') }}
+          </div>
+        @endif
+
         <div class="mb-3">
           <label for="email" class="form-label">Email</label>
-          <input type="email" name="email" id="email" class="form-control" required autofocus autocomplete="email">
+          <input type="email" name="email" id="email" class="form-control" required autofocus>
         </div>
 
         <div class="mb-3">
           <label for="password" class="form-label">Kata Sandi</label>
-          <input type="password" id="password" name="password" class="form-control" required autocomplete="email">
+          <input type="password" id="password" name="password" class="form-control" required>
         </div>
 
         <button type="submit" class="btn btn-danger w-100">MASUK</button>

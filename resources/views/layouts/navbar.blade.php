@@ -73,7 +73,7 @@
                   <img src="https://ui-avatars.com/api/?bold=true&uppercase=true&background=fff&color=f53d2d&name={{ urlencode(Auth::user()->name) }}" class="rounded-circle" height="40" alt="Avatar">
                 @endif
               </a>
-              <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownProfil">
+              <ul class="dropdown-menu dropdown-menu-end">
                 <li><a class="dropdown-item" href="#">Pengaturan Profil</a></li>
                 <li><hr class="dropdown-divider"></li>
                 <li>

@@ -17,7 +17,6 @@ class DatabaseSeeder extends Seeder
             WalletSeeder::class,
             CategorySeeder::class,
             AuctionSeeder::class,
-            AuctionImageSeeder::class,
         ]);
     }
 }

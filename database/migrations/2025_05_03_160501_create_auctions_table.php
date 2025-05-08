@@ -24,6 +24,7 @@ return new class extends Migration
             $table->enum('status',['PENDING','ACTIVE','CLOSED'])->default('PENDING');
             $table->foreignid('winner_id')->nullable()->constrained('users')->nullOnDelete();
             $table->decimal('final_price',15,2)->nullable();
+            $table->string('image_path');
             $table->timestamps();
         });
     }
