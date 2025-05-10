@@ -44,8 +44,7 @@
           <li class="mb-3"><a class="nav-link text-white d-flex align-items-center gap-2" href="/admin/dashboard"><img src="{{ asset('icons/dashboard.png') }}" width="24">Dashboard</a></li>
           <li class="mb-3"><a class="nav-link text-white d-flex align-items-center gap-2" href="/admin/pengguna"><img src="{{ asset('icons/user.png') }}" width="24">Pengguna</a></li>
           <li class="mb-3"><a class="nav-link text-white d-flex align-items-center gap-2" href="/admin/lelang"><img src="{{ asset('icons/lelang.png') }}" width="24">Lelang</a></li>
-          <li class="mb-3"><a class="nav-link text-white d-flex align-items-center gap-2" href="#"><img src="{{ asset('icons/pembayaran.png') }}" width="24">Pembayaran</a></li>
-          <li class="mb-3"><a class="nav-link text-white d-flex align-items-center gap-2" href="#"><img src="{{ asset('icons/admin.png') }}" width="24">Admin</a></li>
+          <li class="mb-3"><a class="nav-link text-white d-flex align-items-center gap-2" href="/admin/akunadmin"><img src="{{ asset('icons/admin.png') }}" width="24">Admin</a></li>
         </ul>
       </nav>
 

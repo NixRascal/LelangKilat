@@ -5,11 +5,12 @@ namespace App\Http\Controllers;
 use Carbon\Carbon;
 use App\Models\Bid;
 use App\Models\Auction;
+use App\Models\User;
 use App\Models\AuctionImage;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
-use Illuminate\Foundation\Auth\User;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 
 class AdminController extends Controller
@@ -21,7 +22,7 @@ class AdminController extends Controller
         if (Auth::user()-> role !== "ADMIN"){
             return redirect("/")->with("error","Akses hanya untuk admin.");
         }
-        return view("admin.dashboard");
+        return view("admin.dashboard.index");
     }
 
     public function dashboard() {
@@ -41,12 +42,43 @@ class AdminController extends Controller
             $dates->push(Carbon::parse($date)->format('d M'));
         }
 
-        return view("admin.dashboard",compact("totalUsers","totalAuctions","activeAuctions", "bidsToday", "todayAuctions"));
+        return view("admin.dashboard.index",compact("totalUsers","totalAuctions","activeAuctions", "bidsToday", "todayAuctions"));
     }
 
     public function user() {
-        $users = User::all();
+        $users = User::where('role', 'USER')->get();
         return view("admin.user.index",compact("users"));
+    }
+
+    public function editUser($id) {
+        $users = User::find($id);
+        return view('admin.user.edit', compact('users'));
+    }
+
+    public function updateUser(Request $request, $id)
+    {
+        $user = User::findOrFail($id);
+
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'password' => 'nullable|string|min:6',
+        ]);
+
+        $user->name = $validated['name'];
+
+        if ($request->filled('password')) {
+            $user->password = Hash::make($validated['password']);
+        }
+
+        $user->save();
+
+        return redirect("/admin/pengguna")->with("success","Data pengguna berhasil diperbarui");
+    }
+
+    public function destroyUser($id) {
+        $users = User::find($id);
+        $users->delete();
+        return redirect("/admin/pengguna")->with("success","Hapus Data Berhasil");
     }
 
     public function auction() {
@@ -64,40 +96,94 @@ class AdminController extends Controller
         $auction = Auction::findOrFail($id);
         return view('admin.auction.edit', compact('auction'));
     }
-
-
-    public function updateAuction(Request $request, $id) {
-        $auctions = Auction::find($id);
-
+    
+    public function updateAuction(Request $request, $id)
+    {
+        $auction = Auction::findOrFail($id);
+    
         $validated = $request->validate([
-            "title"=> "'required|max:255",
-            "description"=> "required",
-            "cetegory"=> "required",
-            "starting_bid"=> "required",
-            "status"=> "required",
+            'title' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'starting_bid' => 'required|numeric|min:0',
+            'end_time' => 'required|date',
+            'image' => 'nullable|image|max:2048',
+        ]);
+    
+        $auction->title = $validated['title'];
+        $auction->description = $validated['description'];
+    
+        if ($auction->current_bid <= $auction->starting_bid) {
+            $auction->starting_bid = $validated['starting_bid'];
+        }
+    
+        $auction->end_time = $validated['end_time'];
+    
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('uploads', 'public');
+            $auction->image_path = 'storage/' . $imagePath;
+        }
+    
+        $auction->save();
+
+        return redirect("/admin/lelang")->with("success","Data berhasil diperbarui");
+    }    
+
+    public function admins() {
+        $admins = User::where('role', 'ADMIN')->get();
+        return view("admin.admins.index",compact("admins"));
+    }
+
+    public function createAdmin()
+    {
+        return view('admin.admins.create');
+    }
+
+    public function storeAdmin(Request $request)
+    {
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email',
+            'password' => 'required|string|min:6|confirmed',
         ]);
 
-        if ($auctions->current_bid > $auctions->starting_bid && $request->starting_bid != $auctions->starting_bid) {
-            return back()->with('error', 'Harga awal tidak dapat diubah karena sudah ada penawaran.');
-        }
-        
-        $auctions->title = $request->title;
-        $auctions->description = $request->description;
-        
-        if ($auctions->current_bid == $auctions->starting_bid) {
-            $auctions->starting_bid = $request->starting_bid;
+        User::create([
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'password' => Hash::make($validated['password']),
+            'role' => 'ADMIN',
+            'profile_photo' => null,
+        ]);
+        return redirect("/admin/akunadmin")->with("success","Akun admin berhasil ditambahkan");
+    }
+    
+    public function destroyAdmins($id) {
+        $users = User::find($id);
+        $users->delete();
+        return redirect("/admin/akunadmin")->with("success","Hapus Data Berhasil");
+    }
+
+    public function editAdmins($id) {
+        $admins = User::find($id);
+        return view('admin.admins.edit', compact('admins'));
+    }
+
+    public function updateAdmins(Request $request, $id)
+    {
+        $user = User::findOrFail($id);
+
+        $validated = $request->validate([
+            'name' => 'required|string|max:255',
+            'password' => 'nullable|string|min:6',
+        ]);
+
+        $user->name = $validated['name'];
+
+        if ($request->filled('password')) {
+            $user->password = Hash::make($validated['password']);
         }
 
-        if ($request->hasFile('image')) {
-            $file = $request->file('image');
-            $filename = 'auction_' . $auctions->id . '.' . $file->extension();
-            $file->move(public_path('images'), $filename);
-            $auctions->image_path = 'images/' . $filename;
-        }        
+        $user->save();
 
-        $auctions->end_time = $request->end_time;
-        $auctions->save();
-        
-        return redirect("/admin/lelang")->with("success","Hapus Data Berhasil");
+        return redirect("/admin/akunadmin")->with("success","Data pengguna berhasil diperbarui");
     }
 }

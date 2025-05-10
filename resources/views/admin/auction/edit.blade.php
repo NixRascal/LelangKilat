@@ -1,4 +1,4 @@
-@extends('layouts.SideTopBar')
+@extends('layouts.SideTopBarAdmin')
 @section('title', 'Edit Lelang')
 
 @section('content')
@@ -9,7 +9,7 @@
         <div class="alert alert-danger">{{ session('error') }}</div>
     @endif
 
-    <form action="{{ route('auctions.update', $auction->id) }}" method="POST" enctype="multipart/form-data">
+    <form action="{{ route('admin.auction.update', $auction->id) }}" method="POST" enctype="multipart/form-data">
         @csrf
         @method('PUT')
 

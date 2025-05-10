@@ -17,7 +17,7 @@ class AuthController extends Controller
         $data = $request->validate([
             'name' => 'required|string|max:255',
             'email'=> 'required|email|unique:users,email',
-            'password'=> 'required|confirmed|min:8',
+            'password'=> 'required|confirmed|min:6',
         ]);
 
         $user = User::create([
@@ -53,7 +53,7 @@ class AuthController extends Controller
             if (Auth::attempt($credentials)) {
                 $request->session()->regenerate();
                 if ($user->role == 'ADMIN') {
-                    return redirect()->route('admin/dashboard');
+                    return redirect()->route('admin.dashboard');
                 }
                 return redirect()->route('home');
             }

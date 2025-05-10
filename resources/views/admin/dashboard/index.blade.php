@@ -1,4 +1,4 @@
-@extends('layouts.SideTopBar')
+@extends('layouts.SideTopBarAdmin')
 @section('title', 'Dashboard')
 @section('content')
 

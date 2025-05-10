@@ -22,7 +22,7 @@ class HomeController extends Controller
     
         $user = Auth::user(); // Dapatkan data user terbaru dari database
     
-        return view('home', [
+        return view('user.home', [
             'user' => $user,
             'auctions' => $auctions,
             'categories' => $categories,

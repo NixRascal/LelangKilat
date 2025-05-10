@@ -24,6 +24,7 @@ class UserSeeder extends Seeder
                 'email' => 'admin@mail.com',
                 'password' => Hash::make('12345678'),
                 'role' => 'ADMIN',
+                'profile_photo' => null,
                 'profile_photo' => 'profiles/admin.jpg',
                 'created_at' => now(),
             ],
@@ -32,7 +33,7 @@ class UserSeeder extends Seeder
                 'email' => 'rina@mail.com',
                 'password' => Hash::make('12345678'),
                 'role' => 'USER',
-                'profile_photo' => 'profiles/rina.jpg',
+                'profile_photo' => null,
                 'created_at' => now(),
             ],
             [
@@ -40,7 +41,7 @@ class UserSeeder extends Seeder
                 'email' => 'andi@mail.com',
                 'password' => Hash::make('12345678'),
                 'role' => 'USER',
-                'profile_photo' => 'profiles/andi.jpg',
+                'profile_photo' => null,
                 'created_at' => now(),
             ],
             [
@@ -48,7 +49,7 @@ class UserSeeder extends Seeder
                 'email' => 'sinta@mail.com',
                 'password' => Hash::make('12345678'),
                 'role' => 'USER',
-                'profile_photo' => 'profiles/sinta.jpg',
+                'profile_photo' => null,
                 'created_at' => now(),
             ],
             [
@@ -56,7 +57,7 @@ class UserSeeder extends Seeder
                 'email' => 'rizky@mail.com',
                 'password' => Hash::make('12345678'),
                 'role' => 'USER',
-                'profile_photo' => 'profiles/rizky.jpg',
+                'profile_photo' => null,
                 'created_at' => now(),
             ],
             [
@@ -64,7 +65,7 @@ class UserSeeder extends Seeder
                 'email' => 'fajar@mail.com',
                 'password' => Hash::make('12345678'),
                 'role' => 'USER',
-                'profile_photo' => 'profiles/fajar.jpg',
+                'profile_photo' => null,
                 'created_at' => now(),
             ],
             [
@@ -72,7 +73,7 @@ class UserSeeder extends Seeder
                 'email' => 'dewi@mail.com',
                 'password' => Hash::make('12345678'),
                 'role' => 'USER',
-                'profile_photo' => 'profiles/dewi.jpg',
+                'profile_photo' => null,
                 'created_at' => now(),
             ],
             [
@@ -80,7 +81,7 @@ class UserSeeder extends Seeder
                 'email' => 'ilham@mail.com',
                 'password' => Hash::make('12345678'),
                 'role' => 'USER',
-                'profile_photo' => 'profiles/ilham.jpg',
+                'profile_photo' => null,
                 'created_at' => now(),
             ],
             [
@@ -88,7 +89,7 @@ class UserSeeder extends Seeder
                 'email' => 'putri@mail.com',
                 'password' => Hash::make('12345678'),
                 'role' => 'USER',
-                'profile_photo' => 'profiles/putri.jpg',
+                'profile_photo' => null,
                 'created_at' => now(),
             ],
         ]);

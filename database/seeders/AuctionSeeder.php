@@ -22,7 +22,7 @@ class AuctionSeeder extends Seeder
                 'end_time' => Carbon::now()->addDays(2),
                 'status' => 'ACTIVE',
                 'winner_id' => null,
-                'image_path' => 'images/auction1_cover.jpg',
+                'image_path' => 'storage/uploads/auction1_cover.jpg',
             ],
             [
                 'user_id' => 4,
@@ -35,7 +35,7 @@ class AuctionSeeder extends Seeder
                 'end_time' => Carbon::now()->addDays(1),
                 'status' => 'ACTIVE',
                 'winner_id' => null,
-                'image_path' => 'images/auction2_cover.jpg',
+                'image_path' => 'storage/uploads/auction2_cover.jpg',
             ],
             [
                 'user_id' => 5,
@@ -48,7 +48,7 @@ class AuctionSeeder extends Seeder
                 'end_time' => Carbon::now()->addHours(36),
                 'status' => 'ACTIVE',
                 'winner_id' => null,
-                'image_path' => 'images/auction3_cover.jpg',
+                'image_path' => 'storage/uploads/auction3_cover.jpg',
             ],
             [
                 'user_id' => 6,
@@ -61,7 +61,7 @@ class AuctionSeeder extends Seeder
                 'end_time' => Carbon::now()->addHours(20),
                 'status' => 'ACTIVE',
                 'winner_id' => null,
-                'image_path' => 'images/auction4_cover.jpg',
+                'image_path' => 'storage/uploads/auction4_cover.jpg',
             ],
             [
                 'user_id' => 3,
@@ -74,7 +74,7 @@ class AuctionSeeder extends Seeder
                 'end_time' => Carbon::now()->addHours(48),
                 'status' => 'ACTIVE',
                 'winner_id' => null,
-                'image_path' => 'images/auction5_cover.jpg',
+                'image_path' => 'storage/uploads/auction5_cover.jpg',
             ],
             [
                 'user_id' => 4,
@@ -87,7 +87,7 @@ class AuctionSeeder extends Seeder
                 'end_time' => Carbon::now()->addDays(2),
                 'status' => 'ACTIVE',
                 'winner_id' => null,
-                'image_path' => 'images/auction6_cover.jpg',
+                'image_path' => 'storage/uploads/auction6_cover.jpg',
             ],
             [
                 'user_id' => 5,
@@ -100,7 +100,7 @@ class AuctionSeeder extends Seeder
                 'end_time' => Carbon::now()->addDays(3),
                 'status' => 'ACTIVE',
                 'winner_id' => null,
-                'image_path' => 'images/auction7_cover.jpg',
+                'image_path' => 'storage/uploads/auction7_cover.jpg',
             ],
             [
                 'user_id' => 6,
@@ -113,7 +113,7 @@ class AuctionSeeder extends Seeder
                 'end_time' => Carbon::now()->addDays(5),
                 'status' => 'ACTIVE',
                 'winner_id' => null,
-                'image_path' => 'images/auction8_cover.jpg',
+                'image_path' => 'storage/uploads/auction8_cover.jpg',
             ],
             [
                 'user_id' => 3,
@@ -126,7 +126,7 @@ class AuctionSeeder extends Seeder
                 'end_time' => Carbon::now()->addHours(60),
                 'status' => 'ACTIVE',
                 'winner_id' => null,
-                'image_path' => 'images/auction9_cover.jpg',
+                'image_path' => 'storage/uploads/auction9_cover.jpg',
             ],
             [
                 'user_id' => 4,
@@ -139,7 +139,7 @@ class AuctionSeeder extends Seeder
                 'end_time' => Carbon::now()->addDays(4),
                 'status' => 'ACTIVE',
                 'winner_id' => null,
-                'image_path' => 'images/auction10_cover.jpg',
+                'image_path' => 'storage/uploads/auction10_cover.jpg',
             ],
         ]);
     }
