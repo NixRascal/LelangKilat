@@ -21,7 +21,7 @@
   {{-- Navbar --}}
   <nav class="navbar navbar-expand-lg fixed-top py-3" style="background-color: #f53d2d;">
     <div class="container-xl">  
-      <a class="navbar-brand d-flex align-items-center" href="{{ route('home') }}">
+      <a class="navbar-brand d-flex align-items-center" href="home">
         <img src="{{ asset('LogoOnlyPutih.png') }}" alt="Logo" height="45" class="me-2">
         <span class="fw-bold fs-4 text-white">LelangKilat</span>
       </a>

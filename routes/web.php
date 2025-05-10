@@ -1,45 +1,103 @@
 <?php
 
-use App\Http\Controllers\AdminController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\WalletController;
 use App\Http\Controllers\AuctionController;
+use App\Http\Controllers\AdminController;
 
-// Auth routes
-Route::get('daftar', [AuthController::class, 'showRegisterForm'])->name('register.form');
-Route::post('daftar', [AuthController::class, 'register'])->name('register');
+/*
+|--------------------------------------------------------------------------
+| Web Routes
+|--------------------------------------------------------------------------
+*/
 
-Route::get('masuk', [AuthController::class, 'showLoginForm'])->name('login.form');
-Route::post('masuk', [AuthController::class, 'login'])->name('login');
+// 1. Redirect root URL (/) ke halaman login
+Route::redirect('/', '/masuk');
 
-Route::post('keluar', [AuthController::class, 'logout'])->name('logout');
+// 2. Authentication Routes
+// — Form login (hanya guest)
+Route::get('/masuk', [AuthController::class, 'showLoginForm'])
+    ->name('login.form');
+// — Proses login
+Route::post('/masuk', [AuthController::class, 'login'])
+    ->name('login');
+// — Logout (hanya authenticated)
+Route::post('/keluar', [AuthController::class, 'logout'])
+     ->name('logout')
+     ->middleware('auth');
 
-// Home
-Route::get('/', [HomeController::class, 'index'])->name('home');
-Route::get('/home', [HomeController::class, 'index'])->middleware('auth');
+// — Form registrasi (hanya guest)
+Route::get('/daftar', [AuthController::class, 'showRegisterForm'])
+    ->name('register.form');
+// — Proses registrasi
+Route::post('/daftar', [AuthController::class, 'register'])
+    ->name('register');
 
-// Wallet (hanya untuk user login)
-Route::middleware('auth')->group(function () {
-    Route::get('/wallet', [WalletController::class, 'index'])->name('wallet.index');
-});
 
-// Auction routes
-Route::prefix('auctions')->group(function () {
-    Route::get('/', [AuctionController::class, 'index'])->name('auctions.index');
-    Route::get('/create', [AuctionController::class, 'create'])->name('auctions.create');
-    Route::get('/participated', [AuctionController::class, 'participated'])->name('auctions.participated');
-    Route::get('/mine', [AuctionController::class, 'mine'])->name('auctions.mine');
-    Route::get('/{category}', [AuctionController::class, 'index'])->name('auctions.category');
-    Route::get('/{category}', [AuctionController::class, 'index'])->name('auctions.show');
-});
+// 3. Home (hanya authenticated)
+Route::get('/home', [HomeController::class, 'index'])
+    ->name('home')
+    ->middleware('auth');
 
-// routes/web.php
-Route::get('/admin/dashboard', [AdminController::class,'checking'])->name('admin.dashboard')->middleware('auth');
-Route::get('/admin/dashboard', [AdminController::class,'dashboard'])->name('admin.dashboard');
-Route::get('/admin/pengguna', [AdminController::class,'user'])->name('admin.user');
-Route::get('/admin/lelang', [AdminController::class,'auction'])->name('admin.auction');
-Route::get('/admin/lelang/edit/{id}', [AdminController::class,'editAuction'])->name('auctions.edit');
-Route::put('/admin/lelang/update/{id}', [AdminController::class, 'updateAuction'])->name('auctions.update');
-Route::delete('/admin/lelang/delete/{id}', [AdminController::class,'destoryAuction'])->name('auctions.destroy');
+
+// 4. Wallet (hanya authenticated)
+Route::get('/wallet', [WalletController::class, 'index'])
+    ->name('wallet.index')
+    ->middleware('auth');
+
+
+// 5. Auction Routes
+// — Daftar semua lelang (publik)
+Route::get('/auctions', [AuctionController::class, 'index'])
+    ->name('auctions.index');
+// — Form buat lelang (authenticated)
+Route::get('/auctions/create', [AuctionController::class, 'create'])
+    ->name('auctions.create')
+    ->middleware('auth');
+// — Simpan lelang baru
+Route::post('/auctions', [AuctionController::class, 'store'])
+    ->name('auctions.store')
+    ->middleware('auth');
+// — Lelang yang diikuti user
+Route::get('/auctions/participated', [AuctionController::class, 'participated'])
+    ->name('auctions.participated')
+    ->middleware('auth');
+// — Lelang milik user
+Route::get('/auctions/mine', [AuctionController::class, 'mine'])
+    ->name('auctions.mine')
+    ->middleware('auth');
+// — Filter lelang berdasarkan kategori
+Route::get('/auctions/category/{category}', [AuctionController::class, 'index'])
+    ->name('auctions.category');
+// — Detail satu lelang
+Route::get('/auctions/{auction}', [AuctionController::class, 'show'])
+    ->name('auctions.show');
+    
+// 6. Admin Routes (hanya authenticated)
+// — Role checking (opsional)
+// — Dashboard
+Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])
+    ->name('admin.dashboard')
+    ->middleware('auth');
+// — Manajemen pengguna
+Route::get('/admin/pengguna', [AdminController::class, 'user'])
+    ->name('admin.user')
+    ->middleware('auth');
+// — List semua lelang (admin)
+Route::get('/admin/lelang', [AdminController::class, 'auction'])
+    ->name('admin.auction')
+    ->middleware('auth');
+// — Edit lelang
+Route::get('/admin/lelang/edit/{id}', [AdminController::class, 'editAuction'])
+    ->name('admin.auction.edit')
+    ->middleware('auth');
+// — Update lelang
+Route::put('/admin/lelang/update/{id}', [AdminController::class, 'updateAuction'])
+    ->name('admin.auction.update')
+    ->middleware('auth');
+// — Hapus lelang
+Route::delete('/admin/lelang/delete/{id}', [AdminController::class, 'destoryAuction'])
+    ->name('admin.auction.destroy')
+    ->middleware('auth');

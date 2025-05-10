@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
-    public function showoRegisterForm() {
+    public function showRegisterForm() {
         return view("auth.register");
     }
 
@@ -33,7 +33,7 @@ class AuthController extends Controller
         ]);
 
         Auth::login($user);
-
+        
         return redirect()->route('home');
     }
     
@@ -50,11 +50,14 @@ class AuthController extends Controller
         if (Auth::attempt($credentials)) {
             $user = Auth::user();
 
-            if ($user->role == 'ADMIN') {
-                return redirect()->route('admin.dashboard');
+            if (Auth::attempt($credentials)) {
+                $request->session()->regenerate();
+                if ($user->role == 'ADMIN') {
+                    return redirect()->route('admin/dashboard');
+                }
+                return redirect()->route('home');
             }
 
-            return redirect()->intended('home');
         }
         
         return back()->withErrors(['salah'=> 'Email atau password salah'])->onlyInput('email');

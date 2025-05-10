@@ -43,7 +43,7 @@
               <span class="label-live bg-secondary">Selesai</span>
             @endif
 
-            <img src="{{ asset($auc->coverImage->image_path) }}" class="card-img-top fixed-img" alt="Gambar Lelang">
+            <img src="{{ asset($auc->image_path) }}" class="card-img-top fixed-img" alt="Gambar Lelang">
 
             <div class="card-body">
               <small class="text-muted d-block mb-1">

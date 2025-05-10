@@ -15,7 +15,7 @@ class HomeController extends Controller
     public function index()
     {
         $categories = Category::all();
-        $auctions = Auction::with(['category', 'coverImage'])
+        $auctions = Auction::with(['category'])
             ->where('status', 'ACTIVE')
             ->latest()
             ->paginate(12);
