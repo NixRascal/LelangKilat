@@ -12,7 +12,16 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule): void
     {
-        // $schedule->command('inspire')->hourly();
+        $schedule->command('auction:close-expired')->everyMinute();
+        $schedule->call(function() {
+            \App\Models\Auction::where('status','PENDING')
+                ->where('start_time','<=', now())
+                ->update(['status'=>'ACTIVE']);
+    
+            \App\Models\Auction::where('status','ACTIVE')
+                ->where('end_time','<=', now())
+                ->update(['status'=>'CLOSED']);
+        })->everyMinute();
     }
 
     /**

@@ -11,12 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('bids', function (Blueprint $table) {
+        Schema::create('ads', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('auction_id')->constrained()->onDelete('cascade');
-            $table->foreignId('user_id')->constrained()->onDelete('cascade');
-            $table->decimal('amount',15,2);
-            $table->enum('hold_status', ['held', 'released'])->default('held');
+            $table->string('image_path'); // contoh: 'ads/banner1.png'
             $table->timestamps();
         });
     }
@@ -26,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('bids');
+        Schema::dropIfExists('ads');
     }
 };

@@ -20,6 +20,7 @@ class Auction extends Model
         'status',
         'winner_id',
         'final_price',
+        'highest_bidder_id',
     ];
 
     public function owner() {
@@ -41,7 +42,8 @@ class Auction extends Model
     public function category() {
         return $this->belongsTo(Category::class);
     }
-    public function coverImage() {
-        return $this->hasOne(AuctionImage::class)->where('is_cover', true);
+    public function highestBidder() {
+        return $this->belongsTo(User::class, 'highest_bidder_id');
     }
+
 }

@@ -1,4 +1,4 @@
-@extends('layouts.footer')
+@extends('layouts.main')
 
 @section('title', 'Register')
 
@@ -12,11 +12,15 @@
 <div class="row min-vh-100 justify-content-center align-items-center">
   <div class="col-12 col-md-10 d-flex flex-column flex-md-row align-items-center justify-content-between">
     
-    <div class="text-center text-white mb-5 mb-md-0 w-100 w-md-50">
-      <img src="{{ asset('LogoLengkap.png') }}" alt="Lelang Kilat" style="height: 250px;" class="mb-1">
-      <h3 class="fw-bold">Selamat Datang di <span style="color: #fff">LelangKilat</span></h3>
-      <p class="mb-0">Bidding Lebih Cepat, Lebih Transparan, Lebih Aman</p>
-    </div>
+    <a href="{{ url('/home') }}" class="text-decoration-none">
+      <div class="text-center text-white mb-4 mb-md-0 w-100 w-md-50">
+        <img src="{{ asset('LogoLengkap.png') }}" alt="Lelang Kilat" style="height: 230px;" class="mb-2">
+        <h3 class="fw-bold text-white mb-2">
+          Selamat Datang di <span style="color: #fff">LelangKilat</span>
+        </h3>
+        <p class="mb-0 text-white small">Bidding Lebih Cepat, Lebih Transparan, Lebih Aman</p>
+      </div>
+    </a>    
 
     <div class="card shadow-sm p-4 w-100 w-md-50" style="max-width: 400px;">
       <h5 class="text-center mb-4">Daftar</h5>

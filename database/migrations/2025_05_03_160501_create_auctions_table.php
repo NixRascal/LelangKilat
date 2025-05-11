@@ -19,6 +19,8 @@ return new class extends Migration
             $table->foreignId('category_id')->constrained()->onDelete('cascade');
             $table->decimal('starting_bid',15,2);
             $table->decimal('current_bid',15,2)->nullable();
+            $table->decimal('bid_increment', 15, 2)->default(1000);
+            $table->foreignId('highest_bidder_id')->nullable()->constrained('users')->nullOnDelete();
             $table->dateTime('start_time');
             $table->dateTime('end_time');
             $table->enum('status',['PENDING','ACTIVE','CLOSED'])->default('PENDING');

@@ -1,11 +1,12 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\BidController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\AdminController;
 use App\Http\Controllers\WalletController;
 use App\Http\Controllers\AuctionController;
-use App\Http\Controllers\AdminController;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,7 +15,7 @@ use App\Http\Controllers\AdminController;
 */
 
 // 1. Redirect root URL (/) ke halaman login
-Route::redirect('/', '/masuk');
+Route::redirect('/', '/home');
 
 // 2. Authentication Routes
 Route::get('/masuk', [AuthController::class, 'showLoginForm'])->name('login.form');
@@ -22,9 +23,9 @@ Route::post('/masuk', [AuthController::class, 'login'])->name('login');
 Route::post('/keluar', [AuthController::class, 'logout'])->name('logout')->middleware('auth');
 Route::get('/daftar', [AuthController::class, 'showRegisterForm'])->name('register.form');
 Route::post('/daftar', [AuthController::class, 'register'])->name('register');
-Route::get('/home', [HomeController::class, 'index'])->name('home')->middleware('auth');
+Route::get('/home', [HomeController::class, 'index'])->name('home');
 Route::get('/wallet', [WalletController::class, 'index'])->name('wallet.index')->middleware('auth');
-
+Route::get('/cari', [HomeController::class, 'search'])->name('search');
 
 // 5. Auction Routes
 Route::get('/auctions', [AuctionController::class, 'index'])->name('auctions.index');
@@ -33,7 +34,8 @@ Route::post('/auctions', [AuctionController::class, 'store'])->name('auctions.st
 Route::get('/auctions/participated', [AuctionController::class, 'participated'])->name('auctions.participated')->middleware('auth');
 Route::get('/auctions/mine', [AuctionController::class, 'mine'])->name('auctions.mine')->middleware('auth');
 Route::get('/auctions/category/{category}', [AuctionController::class, 'index'])->name('auctions.category');
-Route::get('/auctions/{auction}', [AuctionController::class, 'show'])->name('auctions.show');
+Route::get('/lelang/{auction}', [AuctionController::class, 'show'])->name('auctions.show');
+Route::post('/bid/{auction}', [BidController::class, 'store'])->name('bid.place')->middleware('auth');
     
 // 6. Admin Routes (hanya authenticated)
 Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard')->middleware('auth');

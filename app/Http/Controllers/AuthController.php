@@ -48,16 +48,14 @@ class AuthController extends Controller
         ]);
 
         if (Auth::attempt($credentials)) {
+            $request->session()->regenerate();
+    
             $user = Auth::user();
-
-            if (Auth::attempt($credentials)) {
-                $request->session()->regenerate();
-                if ($user->role == 'ADMIN') {
-                    return redirect()->route('admin.dashboard');
-                }
-                return redirect()->route('home');
+            if ($user->role == 'ADMIN') {
+                return redirect()->route('admin.dashboard');
             }
-
+    
+            return redirect()->route('home');
         }
         
         return back()->withErrors(['salah'=> 'Email atau password salah'])->onlyInput('email');
