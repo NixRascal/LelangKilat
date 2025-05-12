@@ -29,26 +29,4 @@ class HomeController extends Controller
             'ads' => $ads,
         ]);
     }
-
-    public function search(Request $request)
-    {
-        $search = $request->input('search');
-        $keywords = explode(' ', $search);
-
-        $auctions = Auction::with('category')
-            ->where('status', 'ACTIVE')
-            ->where(function ($query) use ($keywords) {
-                foreach ($keywords as $word) {
-                    $query->orWhere('title', 'like', '%' . $word . '%')
-                        ->orWhere('description', 'like', '%' . $word . '%');
-                }
-            })
-            ->latest()
-            ->paginate(12);
-
-        $user = Auth::user();
-
-        return view('user.search_result', compact('auctions', 'user'));
-    }
-
 }

@@ -4,7 +4,15 @@
 
 @section('content')
 <div class="content-wrapper">
-    <h4 class="mt-3 mb-3">Hasil Pencarian "{{ request('search') }}"</h4>
+    @isset($category)
+        <h4 class="mt-3 mb-3">
+            Hasil Pencarian Kategori “{{ $category->name }}”
+        </h4>
+    @elseif(request()->filled('search'))
+        <h4 class="mt-3 mb-3">
+            Hasil Pencarian “{{ request('search') }}”
+        </h4>
+    @endisset
 
     @if($auctions->isEmpty())
         <div class="alert alert-warning">Barang tidak ditemukan.</div>

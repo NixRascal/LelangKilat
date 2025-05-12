@@ -25,15 +25,15 @@ Route::get('/daftar', [AuthController::class, 'showRegisterForm'])->name('regist
 Route::post('/daftar', [AuthController::class, 'register'])->name('register');
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 Route::get('/wallet', [WalletController::class, 'index'])->name('wallet.index')->middleware('auth');
-Route::get('/cari', [HomeController::class, 'search'])->name('search');
+Route::get('/cari', [AuctionController::class, 'search'])->name('search');
 
 // 5. Auction Routes
-Route::get('/auctions', [AuctionController::class, 'index'])->name('auctions.index');
-Route::get('/auctions/create', [AuctionController::class, 'create'])->name('auctions.create')->middleware('auth');
-Route::post('/auctions', [AuctionController::class, 'store'])->name('auctions.store')->middleware('auth');
-Route::get('/auctions/participated', [AuctionController::class, 'participated'])->name('auctions.participated')->middleware('auth');
-Route::get('/auctions/mine', [AuctionController::class, 'mine'])->name('auctions.mine')->middleware('auth');
-Route::get('/auctions/category/{category}', [AuctionController::class, 'index'])->name('auctions.category');
+Route::get('/lelang', [AuctionController::class, 'index'])->name('auctions.index');
+Route::get('/lelang/create', [AuctionController::class, 'create'])->name('auctions.create')->middleware('auth');
+Route::post('/lelang', [AuctionController::class, 'store'])->name('auctions.store')->middleware('auth');
+Route::get('/lelang/participated', [AuctionController::class, 'participated'])->name('auctions.participated')->middleware('auth');
+Route::get('/lelang/mine', [AuctionController::class, 'mine'])->name('auctions.mine')->middleware('auth');
+Route::get('/lelang/kategori/{slug}', [AuctionController::class, 'category'])->name('auctions.category');
 Route::get('/lelang/{auction}', [AuctionController::class, 'show'])->name('auctions.show');
 Route::post('/bid/{auction}', [BidController::class, 'store'])->name('bid.place')->middleware('auth');
     

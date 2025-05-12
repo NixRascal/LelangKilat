@@ -29,7 +29,8 @@
     <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-6 g-3">
       @foreach($categories as $cat)
         <div class="col">
-          <a href="{{ route('auctions.index', ['category' => $cat['name']]) }}" class="text-decoration-none text-dark">
+          <a href="{{ route('auctions.category', $cat->slug) }}" class="text-decoration-none text-dark">
+          {{-- <a href="{{ route('user.search_result', ['category' => $cat['name']]) }}" class="text-decoration-none text-dark"> --}}
             <div class="card text-center border-0 shadow h-100 py-3">
               <img src="{{ $cat['icon_path'] }}" alt="{{ $cat['name'] }}"
                    class="mx-auto mb-2" style="width:55px;height:55px;object-fit:contain;">
