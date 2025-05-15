@@ -28,7 +28,6 @@ Route::get('/wallet', [WalletController::class, 'index'])->name('wallet.index')-
 Route::get('/cari', [AuctionController::class, 'search'])->name('search');
 
 // 5. Auction Routes
-Route::get('/lelang', [AuctionController::class, 'index'])->name('auctions.index');
 Route::get('/lelang/create', [AuctionController::class, 'create'])->name('auctions.create')->middleware('auth');
 Route::post('/lelang', [AuctionController::class, 'store'])->name('auctions.store')->middleware('auth');
 Route::get('/lelang/participated', [AuctionController::class, 'participated'])->name('auctions.participated')->middleware('auth');
