@@ -48,35 +48,14 @@
       @foreach($auctions as $auc)
         <div class="col">
           <div class="card h-100">
-
-            {{-- hitung status berdasarkan waktu --}}
-            @php
-              $now   = \Carbon\Carbon::now();
-              $start = \Carbon\Carbon::parse($auc->start_time);
-              $end   = \Carbon\Carbon::parse($auc->end_time);
-
-              if ($now->lt($start)) {
-                $state = 'PENDING';
-              } elseif ($now->between($start, $end)) {
-                $state = 'ACTIVE';
-              } else {
-                $state = 'CLOSED';
-              }
-            @endphp
-
             {{-- status label --}}
-            <span class="label-live
-              {{ $state=='PENDING' ? 'bg-warning text-dark' : '' }}
-              {{ $state=='ACTIVE'  ? '' : '' }}
-              {{ $state=='CLOSED'  ? 'bg-secondary' : '' }}">
-              @if ($state=='PENDING')
-                Menunggu Dimulai
-              @elseif ($state=='ACTIVE')
-                Sedang Berlangsung
-              @else
-                Selesai
-              @endif
-            </span>
+            @if ($auc->status === 'ACTIVE')
+              <span class="label-live">Sedang Berlangsung</span>
+            @elseif ($auc->status === 'PENDING')
+              <span class="label-live bg-warning text-dark">Menunggu Dimulai</span>
+            @elseif ($auc->status === 'CLOSED')
+              <span class="label-live bg-secondary">Selesai</span>
+            @endif
 
             {{-- gambar --}}
             <img src="{{ asset($auc->image_path) }}" class="card-img-top fixed-img" alt="Gambar Lelang">
@@ -85,10 +64,10 @@
             <div class="card-body">
               {{-- countdown / teks status --}}
               <small class="text-muted d-block mb-1">
-                @if ($state=='PENDING')
-                  Dimulai dalam {{ $start->diffForHumans($now, true) }}
-                @elseif ($state=='ACTIVE')
-                  Berakhir dalam {{ $end->diffForHumans($now, true) }}
+                @if ($auc->status === 'PENDING')
+                  Dimulai dalam {{ \Carbon\Carbon::parse($auc->start_time)->diffForHumans(\Carbon\Carbon::now(), true) }}
+                @elseif ($auc->status === 'ACTIVE')
+                  Berakhir dalam {{ \Carbon\Carbon::parse($auc->end_time)->diffForHumans(\Carbon\Carbon::now(), true) }}
                 @else
                   Berakhir
                 @endif

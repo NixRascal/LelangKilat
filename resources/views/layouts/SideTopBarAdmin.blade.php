@@ -45,6 +45,7 @@
           <li class="mb-3"><a class="nav-link text-white d-flex align-items-center gap-2" href="/admin/pengguna"><img src="{{ asset('icons/user.png') }}" width="24">Pengguna</a></li>
           <li class="mb-3"><a class="nav-link text-white d-flex align-items-center gap-2" href="/admin/lelang"><img src="{{ asset('icons/lelang.png') }}" width="24">Lelang</a></li>
           <li class="mb-3"><a class="nav-link text-white d-flex align-items-center gap-2" href="/admin/akunadmin"><img src="{{ asset('icons/admin.png') }}" width="24">Admin</a></li>
+          <li class="mb-3"><a class="nav-link text-white d-flex align-items-center gap-2" href="{{ route('admin.banner.edit') }}"><img src="{{ asset('icons/banner.png') }}" width="24">Banner</a></li>
         </ul>
       </nav>
 

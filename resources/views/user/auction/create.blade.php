@@ -4,7 +4,7 @@
 
 @section('content')
 <div class="content-wrapper">
-    <div class="container">
+    <div class="container py-4">
         <h2>Buat Lelang Baru</h2>
         <form action="{{ route('auctions.store') }}" method="POST" enctype="multipart/form-data">
             @csrf

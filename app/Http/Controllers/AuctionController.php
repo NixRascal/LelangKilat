@@ -17,14 +17,13 @@ class AuctionController extends Controller
     }
     public function show(Auction $auction)
     {
-        $auction->load([
-            'bids.user',         // untuk riwayat penawaran
-            'owner',             // pengguna yang membuat lelang
-            'category',          // kategori barang
-            'highestBidder'      // penawar tertinggi (jika pakai highest_bidder_id)
+        $auction->load(['bids' => function ($query) {
+            $query->with('user')->latest();
+        }, 'owner']);
+
+        return view('user.auction.show', [
+            'auction' => $auction
         ]);
-    
-        return view('user.auction.show', compact('auction'));
     }
     public function category($slug)
     {
@@ -117,5 +116,91 @@ class AuctionController extends Controller
         $auction->save();
 
         return redirect()->route('auctions.mine')->with('success', 'Lelang berhasil dibuat!');
+    }
+
+    public function mine()
+    {
+        $auctions = Auction::where('user_id', auth()->id())
+            ->with(['bids' => function ($query) {
+                $query->latest();
+            }])
+            ->latest()
+            ->paginate(9);
+
+        return view('user.auction.mine', [
+            'auctions' => $auctions
+        ]);
+    }
+
+    public function editUser($id)
+    {
+        $auction = \App\Models\Auction::where('user_id', auth()->id())->findOrFail($id);
+        return view('user.auction.edit', compact('auction'));
+    }
+
+    public function updateUser(Request $request, $id)
+    {
+        $auction = \App\Models\Auction::where('user_id', auth()->id())->findOrFail($id);
+
+        $validated = $request->validate([
+            'title' => 'required|string|max:255',
+            'description' => 'nullable|string',
+            'starting_bid' => 'required|numeric|min:0',
+            'start_time' => 'required|date',
+            'duration_days' => 'nullable|integer|min:0',
+            'duration_hours' => 'nullable|integer|min:0|max:23',
+            'duration_minutes' => 'nullable|integer|min:0|max:59',
+            'image' => 'nullable|image|max:2048',
+        ]);
+
+        $auction->title = $validated['title'];
+        $auction->description = $validated['description'];
+
+        if ($auction->current_bid <= $auction->starting_bid) {
+            $auction->starting_bid = $validated['starting_bid'];
+        }
+
+        $auction->start_time = $validated['start_time'];
+        $days = (int) $request->input('duration_days', 0);
+        $hours = (int) $request->input('duration_hours', 0);
+        $minutes = (int) $request->input('duration_minutes', 0);
+        $auction->end_time = \Carbon\Carbon::parse($validated['start_time'])
+            ->addDays($days)
+            ->addHours($hours)
+            ->addMinutes($minutes);
+
+        if ($request->hasFile('image')) {
+            $imagePath = $request->file('image')->store('uploads', 'public');
+            $auction->image_path = 'storage/' . $imagePath;
+        }
+
+        $auction->save();
+
+        return redirect()->route('auctions.mine')->with('success', 'Lelang berhasil diperbarui');
+    }
+
+    public function participated()
+    {
+        $userId = auth()->id();
+        $auctionIds = \App\Models\Bid::where('user_id', $userId)->pluck('auction_id')->unique();
+        $auctions = \App\Models\Auction::whereIn('id', $auctionIds)->latest()->paginate(9);
+
+        return view('user.auction.participated', [
+            'auctions' => $auctions
+        ]);
+    }
+
+    public function participationDetail($auctionId)
+    {
+        $auction = \App\Models\Auction::with('category')->findOrFail($auctionId);
+        $user = auth()->user();
+
+        // Ambil semua bid user pada lelang ini
+        $userBids = $auction->bids()->where('user_id', $user->id)->orderByDesc('created_at')->get();
+
+        return view('user.auction.participation_detail', [
+            'auction' => $auction,
+            'userBids' => $userBids,
+        ]);
     }
 }

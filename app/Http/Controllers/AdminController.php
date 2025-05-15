@@ -12,6 +12,7 @@ use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\DB;
 
 class AdminController extends Controller
 {
@@ -185,5 +186,71 @@ class AdminController extends Controller
         $user->save();
 
         return redirect("/admin/akunadmin")->with("success","Data pengguna berhasil diperbarui");
+    }
+
+    public function editBanner()
+    {
+        $banners = DB::table('ads')->get();
+        return view('admin.banner.edit', compact('banners'));
+    }
+
+    public function updateBanner(Request $request)
+    {
+        $request->validate([
+            'banner' => 'required|image|max:2048',
+        ]);
+
+        if ($request->hasFile('banner')) {
+            $image = $request->file('banner');
+            $imageName = 'ads/' . uniqid('banner_') . '.' . $image->getClientOriginalExtension();
+            $image->move(public_path('ads'), $imageName);
+
+            DB::table('ads')->insert([
+                'image_path' => $imageName,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+        }
+
+        return redirect()->route('admin.banner.edit')->with('success', 'Banner berhasil ditambahkan!');
+    }
+
+    public function editSingleBanner($id)
+    {
+        $banner = DB::table('ads')->where('id', $id)->first();
+        return view('admin.banner.single_edit', compact('banner'));
+    }
+
+    public function updateSingleBanner(Request $request, $id)
+    {
+        $request->validate([
+            'banner' => 'nullable|image|max:2048',
+        ]);
+
+        $data = [];
+        if ($request->hasFile('banner')) {
+            $image = $request->file('banner');
+            $imageName = 'ads/' . uniqid('banner_') . '.' . $image->getClientOriginalExtension();
+            $image->move(public_path('ads'), $imageName);
+            $data['image_path'] = $imageName;
+        }
+        $data['updated_at'] = now();
+
+        DB::table('ads')->where('id', $id)->update($data);
+
+        return redirect()->route('admin.banner.edit')->with('success', 'Banner berhasil diupdate!');
+    }
+
+    public function deleteBanner($id)
+    {
+        $banner = DB::table('ads')->where('id', $id)->first();
+        if ($banner) {
+            $filePath = public_path('storage/' . $banner->image_path);
+            if (file_exists($filePath)) {
+                @unlink($filePath);
+            }
+            DB::table('ads')->where('id', $id)->delete();
+        }
+        return redirect()->route('admin.banner.edit')->with('success', 'Banner berhasil dihapus!');
     }
 }

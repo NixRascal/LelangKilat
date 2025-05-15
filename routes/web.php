@@ -35,6 +35,9 @@ Route::get('/lelang/mine', [AuctionController::class, 'mine'])->name('auctions.m
 Route::get('/lelang/kategori/{slug}', [AuctionController::class, 'category'])->name('auctions.category');
 Route::get('/lelang/{auction}', [AuctionController::class, 'show'])->name('auctions.show');
 Route::post('/bid/{auction}', [BidController::class, 'store'])->name('bid.place')->middleware('auth');
+Route::get('/lelang/edit/{id}', [AuctionController::class, 'editUser'])->name('user.auction.edit')->middleware('auth');
+Route::put('/lelang/update/{id}', [AuctionController::class, 'updateUser'])->name('user.auction.update')->middleware('auth');
+Route::get('/lelang/participated/{auction}', [AuctionController::class, 'participationDetail'])->name('auctions.participation.detail')->middleware('auth');
     
 // 6. Admin Routes (hanya authenticated)
 Route::get('/admin/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard')->middleware('auth');
@@ -55,3 +58,9 @@ Route::put('/admin/akunadmin/update/{id}', [AdminController::class, 'updateAdmin
 Route::get('/admin/akun/tambah', [AdminController::class, 'createAdmin'])->name('admin.admins.create');
 Route::post('/admin/akun/tambah', [AdminController::class, 'storeAdmin'])->name('admin.account.store');
 Route::delete('/admin/akunadmin/delete/{id}', [AdminController::class, 'destroyAdmins'])->name('admin.admins.destroy')->middleware('auth');
+
+Route::get('/admin/banner/edit', [AdminController::class, 'editBanner'])->name('admin.banner.edit')->middleware('auth');
+Route::post('/admin/banner/update', [AdminController::class, 'updateBanner'])->name('admin.banner.update')->middleware('auth');
+Route::get('/admin/banner/{id}/edit', [AdminController::class, 'editSingleBanner'])->name('admin.banner.single.edit')->middleware('auth');
+Route::post('/admin/banner/{id}/update', [AdminController::class, 'updateSingleBanner'])->name('admin.banner.single.update')->middleware('auth');
+Route::delete('/admin/banner/{id}/delete', [AdminController::class, 'deleteBanner'])->name('admin.banner.delete')->middleware('auth');
