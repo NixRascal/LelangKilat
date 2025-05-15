@@ -1,4 +1,4 @@
-@extends('layouts.navbar') {{-- Pastikan ini hanya navbar, tanpa banner/kategori --}}
+@extends('layouts.navbar')
 
 @section('title', 'Hasil Pencarian')
 

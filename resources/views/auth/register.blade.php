@@ -26,6 +26,13 @@
       <h5 class="text-center mb-4">Daftar</h5>
       <form method="POST" action="{{ route('register') }}">
         @csrf
+        @if ($errors->any())
+          <ul>
+              @foreach ($errors->all() as $error)
+                  <li class="text-red-600">{{ $error }}</li>
+              @endforeach
+          </ul>
+        @endif
         <div class="mb-3">
           <label for="name" class="form-label">Nama</label>
           <input type="text" id="name" name="name" class="form-control" required autofocus>
@@ -37,6 +44,10 @@
         <div class="mb-3">
           <label for="password" class="form-label">Kata Sandi</label>
           <input type="password" id="password" name="password" class="form-control" required>
+        </div>
+        <div class="mb-3">
+          <label for="password_confirmation" class="form-label">Konfirmasi Kata Sandi</label>
+          <input type="password" id="password_confirmation" name="password_confirmation" class="form-control" required>
         </div>
         <button type="submit" class="btn btn-danger w-100">DAFTAR</button>
       </form>
