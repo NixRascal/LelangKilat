@@ -55,8 +55,8 @@ Route::delete('/admin/lelang/delete/{id}', [AdminController::class, 'destoryAuct
 Route::get('/admin/akunadmin', [AdminController::class, 'admins'])->name('admin.admins')->middleware('auth');
 Route::get('/admin/akunadmin/edit/{id}', [AdminController::class, 'editAdmins'])->name('admin.admins.edit')->middleware('auth');
 Route::put('/admin/akunadmin/update/{id}', [AdminController::class, 'updateAdmins'])->name('admin.admins.update')->middleware('auth');
-Route::get('/admin/akun/tambah', [AdminController::class, 'createAdmin'])->name('admin.admins.create');
-Route::post('/admin/akun/tambah', [AdminController::class, 'storeAdmin'])->name('admin.account.store');
+Route::get('/admin/akun/tambah', [AdminController::class, 'createAdmin'])->name('admin.admins.create')->middleware('auth');
+Route::post('/admin/akun/tambah', [AdminController::class, 'storeAdmin'])->name('admin.account.store')->middleware('auth');
 Route::delete('/admin/akunadmin/delete/{id}', [AdminController::class, 'destroyAdmins'])->name('admin.admins.destroy')->middleware('auth');
 
 Route::get('/admin/banner/edit', [AdminController::class, 'editBanner'])->name('admin.banner.edit')->middleware('auth');
@@ -64,3 +64,5 @@ Route::post('/admin/banner/update', [AdminController::class, 'updateBanner'])->n
 Route::get('/admin/banner/{id}/edit', [AdminController::class, 'editSingleBanner'])->name('admin.banner.single.edit')->middleware('auth');
 Route::post('/admin/banner/{id}/update', [AdminController::class, 'updateSingleBanner'])->name('admin.banner.single.update')->middleware('auth');
 Route::delete('/admin/banner/{id}/delete', [AdminController::class, 'deleteBanner'])->name('admin.banner.delete')->middleware('auth');
+Route::get('/admin/banner/create', [AdminController::class, 'createBanner'])->name('admin.banner.create')->middleware('auth');
+Route::post('/admin/banner/store', [AdminController::class, 'storeBanner'])->name('admin.banner.store')->middleware('auth');

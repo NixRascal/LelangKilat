@@ -4,7 +4,7 @@
 @section('content')
 <div class="container">
     <h3>Edit Banner</h3>
-    <img src="{{ asset('storage/' . ltrim($banner->image_path, '/')) }}" width="400" class="mb-3 border">
+    <img src="{{ Str::startsWith($banner->image_path, 'storage/') ? asset($banner->image_path) : asset('storage/'.$banner->image_path) }}" width="400" class="mb-3 border">
     <form action="{{ route('admin.banner.single.update', $banner->id) }}" method="POST" enctype="multipart/form-data">
         @csrf
         <div class="mb-3">

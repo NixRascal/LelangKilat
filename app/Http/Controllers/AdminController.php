@@ -202,11 +202,9 @@ class AdminController extends Controller
 
         if ($request->hasFile('banner')) {
             $image = $request->file('banner');
-            $imageName = 'ads/' . uniqid('banner_') . '.' . $image->getClientOriginalExtension();
-            $image->move(public_path('ads'), $imageName);
-
+            $imagePath = $image->store('ads', 'public');
             DB::table('ads')->insert([
-                'image_path' => $imageName,
+                'image_path' => 'storage/' . $imagePath,
                 'created_at' => now(),
                 'updated_at' => now(),
             ]);
@@ -230,9 +228,8 @@ class AdminController extends Controller
         $data = [];
         if ($request->hasFile('banner')) {
             $image = $request->file('banner');
-            $imageName = 'ads/' . uniqid('banner_') . '.' . $image->getClientOriginalExtension();
-            $image->move(public_path('ads'), $imageName);
-            $data['image_path'] = $imageName;
+            $imagePath = $image->store('ads', 'public');
+            $data['image_path'] = 'storage/' . $imagePath;
         }
         $data['updated_at'] = now();
 
@@ -252,5 +249,24 @@ class AdminController extends Controller
             DB::table('ads')->where('id', $id)->delete();
         }
         return redirect()->route('admin.banner.edit')->with('success', 'Banner berhasil dihapus!');
+    }
+
+    public function storeBanner(Request $request)
+    {
+        $request->validate([
+            'banner' => 'required|image|max:2048',
+        ]);
+
+        if ($request->hasFile('banner')) {
+            $image = $request->file('banner');
+            $imagePath = $image->store('ads', 'public');
+            DB::table('ads')->insert([
+                'image_path' => 'storage/' . $imagePath,
+                'created_at' => now(),
+                'updated_at' => now(),
+            ]);
+        }
+
+        return redirect()->route('admin.banner.edit')->with('success', 'Banner berhasil ditambahkan!');
     }
 }

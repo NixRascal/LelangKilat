@@ -4,6 +4,7 @@
 
 @php
 \Carbon\Carbon::setLocale('id');
+use Illuminate\Support\Str;
 @endphp
 
 <div class="content-wrapper">
@@ -12,7 +13,7 @@
     <div class="carousel-inner">
       @foreach ($ads as $index => $ad)
         <div class="carousel-item {{ $index == 0 ? 'active' : '' }}">
-          <img src="{{ Storage::url($ad->image_path) }}" class="d-block w-100 rounded banner-fixed" alt="Banner {{ $index + 1 }}">
+          <img src="{{ Str::startsWith($ad->image_path, 'storage/') ? asset($ad->image_path) : asset('storage/'.$ad->image_path) }}" class="d-block w-100 rounded banner-fixed" alt="Banner {{ $index + 1 }}">
         </div>
       @endforeach
     </div>
