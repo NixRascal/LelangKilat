@@ -21,6 +21,7 @@ class Auction extends Model
         'winner_id',
         'final_price',
         'highest_bidder_id',
+        'category_id',
     ];
 
     public function owner() {

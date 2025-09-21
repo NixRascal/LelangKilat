@@ -1,0 +1,612 @@
+openapi: 3.0.3
+info:
+  title: LelangKilat API
+  version: 1.0.0
+  description: >-
+    API RESTful untuk platform LelangKilat. Semua tanggal menggunakan zona waktu Asia/Jakarta.
+servers:
+  - url: https://api.lelangkilat.local/api/v1
+    description: Production
+  - url: https://staging.api.lelangkilat.local/api/v1
+    description: Staging
+  - url: http://localhost:8000/api/v1
+    description: Development
+security:
+  - bearerAuth: []
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: SanctumToken
+  responses:
+    UnauthorizedError:
+      description: Token tidak valid atau tidak ada
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    ForbiddenError:
+      description: Tidak memiliki izin
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+  schemas:
+    ErrorResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          example: error
+        error_code:
+          type: string
+          example: ERR_FORBIDDEN
+        message:
+          type: string
+          example: Anda tidak memiliki akses
+        errors:
+          type: object
+      required: [status, error_code, message]
+    LoginRequest:
+      type: object
+      required: [email, password]
+      properties:
+        email:
+          type: string
+          format: email
+          example: admin@lelangkilat.id
+        password:
+          type: string
+          example: rahasia123
+    AuthResponse:
+      type: object
+      properties:
+        status:
+          type: string
+        message:
+          type: string
+        data:
+          type: object
+          properties:
+            token:
+              type: string
+            refresh_token:
+              type: string
+            user:
+              $ref: '#/components/schemas/User'
+    User:
+      type: object
+      properties:
+        id: { type: integer }
+        name: { type: string }
+        email: { type: string }
+        role: { type: string, enum: [admin, staff, user] }
+        wallet_balance: { type: number }
+        created_at: { type: string, format: date-time }
+    Auction:
+      type: object
+      properties:
+        id: { type: integer }
+        title: { type: string }
+        description: { type: string }
+        starting_bid: { type: number }
+        current_bid: { type: number }
+        start_time: { type: string, format: date-time }
+        end_time: { type: string, format: date-time }
+        status: { type: string, enum: [draft, active, completed, cancelled] }
+        owner:
+          $ref: '#/components/schemas/User'
+        category:
+          type: object
+          properties:
+            id: { type: integer }
+            name: { type: string }
+    Category:
+      type: object
+      properties:
+        id: { type: integer }
+        name: { type: string }
+        slug: { type: string }
+        icon_path: { type: string }
+        created_at: { type: string, format: date-time }
+        updated_at: { type: string, format: date-time }
+    PaginationMeta:
+      type: object
+      properties:
+        total: { type: integer }
+        per_page: { type: integer }
+        current_page: { type: integer }
+        last_page: { type: integer }
+    PaginatedAuctionResponse:
+      type: object
+      properties:
+        status: { type: string }
+        message: { type: string }
+        data:
+          type: array
+          items: { $ref: '#/components/schemas/Auction' }
+        meta:
+          $ref: '#/components/schemas/PaginationMeta'
+    PaginatedCategoryResponse:
+      type: object
+      properties:
+        status: { type: string }
+        message: { type: string }
+        data:
+          type: array
+          items: { $ref: '#/components/schemas/Category' }
+        meta:
+          $ref: '#/components/schemas/PaginationMeta'
+    CategoryResponse:
+      type: object
+      properties:
+        status: { type: string }
+        message: { type: string }
+        data:
+          $ref: '#/components/schemas/Category'
+        meta:
+          type: object
+paths:
+  /auth/login:
+    post:
+      summary: Login pengguna
+      tags: [Autentikasi]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+      responses:
+        '200':
+          description: Login berhasil
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+        '422':
+          description: Validasi gagal
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+  /auth/register:
+    post:
+      summary: Registrasi pengguna
+      tags: [Autentikasi]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [name, email, password]
+              properties:
+                name: { type: string }
+                email: { type: string, format: email }
+                password: { type: string, minLength: 8 }
+      responses:
+        '201':
+          description: Registrasi berhasil
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AuthResponse'
+  /auth/logout:
+    post:
+      summary: Logout dan revoke token
+      tags: [Autentikasi]
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Logout berhasil
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+  /dashboard:
+    get:
+      summary: Data ringkasan dashboard
+      tags: [Dashboard]
+      security:
+        - bearerAuth: []
+      parameters:
+        - in: header
+          name: X-Request-Id
+          schema:
+            type: string
+          description: ID request untuk pelacakan log
+      responses:
+        '200':
+          description: Data dashboard
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status: { type: string }
+                  data:
+                    type: object
+                    properties:
+                      metrics:
+                        type: object
+                        additionalProperties:
+                          type: number
+                      trend_bid:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            tanggal: { type: string }
+                            total: { type: integer }
+                      tasks:
+                        type: array
+                        items:
+                          type: object
+          properties:
+            id: { type: integer }
+            title: { type: string }
+            status: { type: string }
+  /categories:
+    get:
+      summary: Daftar kategori
+      tags: [Master Data]
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: page
+          in: query
+          schema: { type: integer }
+        - name: per_page
+          in: query
+          schema: { type: integer, default: 10 }
+        - name: search
+          in: query
+          schema: { type: string }
+      responses:
+        '200':
+          description: Daftar kategori
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedCategoryResponse'
+    post:
+      summary: Membuat kategori baru
+      tags: [Master Data]
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [name, slug]
+              properties:
+                name: { type: string }
+                slug: { type: string }
+                icon_path: { type: string }
+      responses:
+        '201':
+          description: Kategori dibuat
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CategoryResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+  /categories/{id}:
+    get:
+      summary: Detail kategori
+      tags: [Master Data]
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      responses:
+        '200':
+          description: Detail kategori
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CategoryResponse'
+        '404':
+          description: Tidak ditemukan
+    patch:
+      summary: Memperbarui kategori
+      tags: [Master Data]
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name: { type: string }
+                slug: { type: string }
+                icon_path: { type: string }
+      responses:
+        '200':
+          description: Kategori diperbarui
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CategoryResponse'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+    delete:
+      summary: Menghapus kategori
+      tags: [Master Data]
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      responses:
+        '204':
+          description: Kategori dihapus
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+  /auctions:
+    get:
+      summary: List lelang dengan filter
+      tags: [Lelang]
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: page
+          in: query
+          schema: { type: integer }
+        - name: per_page
+          in: query
+          schema: { type: integer, default: 10 }
+        - name: sort
+          in: query
+          schema: { type: string, example: 'created_at:desc' }
+        - name: status
+          in: query
+          schema: { type: string }
+        - name: category
+          in: query
+          schema: { type: string }
+        - name: search
+          in: query
+          schema: { type: string }
+      responses:
+        '200':
+          description: Daftar lelang
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedAuctionResponse'
+    post:
+      summary: Membuat lelang baru
+      tags: [Lelang]
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [title, description, starting_bid, start_time, end_time, status, category_id]
+              properties:
+                title: { type: string }
+                description: { type: string }
+                starting_bid: { type: number }
+                start_time: { type: string, format: date-time }
+                end_time: { type: string, format: date-time }
+                status: { type: string }
+                category_id: { type: integer }
+      responses:
+        '201':
+          description: Lelang dibuat
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Auction'
+  /auctions/{id}:
+    get:
+      summary: Detail lelang
+      tags: [Lelang]
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema: { type: integer }
+      responses:
+        '200':
+          description: Detail
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  status: { type: string }
+                  data:
+                    $ref: '#/components/schemas/Auction'
+    put:
+      summary: Update lelang
+      tags: [Lelang]
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title: { type: string }
+                description: { type: string }
+                status: { type: string }
+      responses:
+        '200':
+          description: Lelang diupdate
+    delete:
+      summary: Hapus lelang
+      tags: [Lelang]
+      security:
+        - bearerAuth: []
+      responses:
+        '204':
+          description: Terhapus
+  /auctions/{id}/bids:
+    get:
+      summary: List penawaran pada lelang
+      tags: [Bid]
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: Daftar bid
+    post:
+      summary: Menempatkan bid
+      tags: [Bid]
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [amount]
+              properties:
+                amount: { type: number }
+      responses:
+        '201': { description: Bid dibuat }
+        '422': { $ref: '#/components/responses/ForbiddenError' }
+  /users:
+    get:
+      summary: Daftar pengguna (admin)
+      tags: [Master Data]
+      security:
+        - bearerAuth: []
+      responses:
+        '200': { description: Daftar pengguna }
+    post:
+      summary: Membuat pengguna baru
+      tags: [Master Data]
+      security:
+        - bearerAuth: []
+      responses:
+        '201': { description: Pengguna dibuat }
+  /users/{id}:
+    put:
+      summary: Update pengguna
+      tags: [Master Data]
+      security:
+        - bearerAuth: []
+      responses:
+        '200': { description: Pengguna diupdate }
+    delete:
+      summary: Hapus pengguna
+      tags: [Master Data]
+      security:
+        - bearerAuth: []
+      responses:
+        '204': { description: Pengguna dihapus }
+  /wallet/transactions:
+    get:
+      summary: Riwayat transaksi dompet
+      tags: [Wallet]
+      security:
+        - bearerAuth: []
+      responses:
+        '200': { description: Daftar transaksi }
+  /wallet/top-up:
+    post:
+      summary: Top up saldo
+      tags: [Wallet]
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [amount]
+              properties:
+                amount: { type: number, minimum: 10000 }
+                description: { type: string }
+      responses:
+        '201': { description: Transaksi dibuat }
+  /reports/auctions/export:
+    get:
+      summary: Ekspor laporan lelang ke CSV
+      tags: [Pelaporan]
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: File CSV
+          content:
+            text/csv:
+              schema:
+                type: string
+                format: binary
+  /settings/profile:
+    get:
+      summary: Profil dan preferensi
+      tags: [Pengaturan]
+      security:
+        - bearerAuth: []
+      responses:
+        '200': { description: Data profil }
+  /settings/preferences:
+    patch:
+      summary: Update preferensi pengguna
+      tags: [Pengaturan]
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                language: { type: string }
+                theme: { type: string }
+                timezone: { type: string }
+      responses:
+        '200': { description: Preferensi diupdate }
+  /audit-logs:
+    get:
+      summary: Daftar audit log
+      tags: [Audit]
+      security:
+        - bearerAuth: []
+      responses:
+        '200': { description: Daftar log }
+  /health/live:
+    get:
+      summary: Liveness probe
+      tags: [Health]
+      responses:
+        '200': { description: OK }
+  /health/ready:
+    get:
+      summary: Readiness probe
+      tags: [Health]
+      security:
+        - bearerAuth: []
+      responses:
+        '200': { description: Ready }

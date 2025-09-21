@@ -9,6 +9,7 @@ use Database\Seeders\UserSeeder;
 use Database\Seeders\WalletSeeder;
 use Database\Seeders\AuctionSeeder;
 use Database\Seeders\CategorySeeder;
+use Database\Seeders\QaSeeder;
 
 class DatabaseSeeder extends Seeder
 {
@@ -23,6 +24,7 @@ class DatabaseSeeder extends Seeder
             WalletSeeder::class,
             CategorySeeder::class,
             AuctionSeeder::class,
+            QaSeeder::class,
         ]);
     }
 }
