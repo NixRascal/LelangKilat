@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\Role;
 use App\Models\Bid;
 use App\Models\Wallet;
 use App\Models\Auction;
@@ -20,12 +21,26 @@ class User extends Authenticatable
         'password',
         'role',
         'profile_photo',
+        'preferences',
     ];
-    
+
     protected $hidden = [
         'password',
         'remember_token',
     ];
+
+    protected $casts = [
+        'preferences' => 'array',
+    ];
+
+    protected $attributes = [
+        'role' => 'user',
+    ];
+
+    public function isRole(Role $role): bool
+    {
+        return $this->role === $role->value;
+    }
 
     public function wallet() {
         return $this->hasOne(Wallet::class);
